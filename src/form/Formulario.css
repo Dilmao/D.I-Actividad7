@@ -35,6 +35,16 @@
 }
 
 .Boton {
+    color: #000000;
+    background-color: #8c8c8c;
+    cursor: pointer;
+    font: inherit;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    border-radius: 64px;
+}
+
+.BotonClickable {
     color: aliceblue;
     background-color: #420492;
     cursor: pointer;

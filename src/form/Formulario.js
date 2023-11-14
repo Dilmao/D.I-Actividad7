@@ -16,7 +16,20 @@ function Fomrulario() {
     const [mensajeSexo, setMensajeSexo] = useState("")
     const [mensajeMensaje, setMensajeMensaje] = useState("")
     const [mensajeTerminos, setMensajeTerminos] = useState("")
+
+    const [botonClickable, setBotonClickable] = useState(false)
     const [mensajeButton, setMensajeButton] = useState("")
+
+    const url = "http://localhost:5000/users"
+
+    let data = {
+        nombre: "",
+        apellido: "",
+        email: "",
+        sexo: "",
+        mensaje: "",
+        terminos: false
+    }
 
     function handleValidateNombre(event) {
         const enteredNombre = event.target.value
@@ -92,14 +105,14 @@ function Fomrulario() {
         (
             (nombre !== "" || nombre <= 10) &&
             (apellido !== "" || apellido <= 20) &&
-            (email !== "" || email <= 20 || email.includes("@")) &&
+            (email !== "" || email <= 20) && email.includes("@") &&
             (sexo !== "") &&
             (mensaje.length <= 500) &&
             (terminos)
         ) {
-            setMensajeButton("Se puede enviar el formulario")
+            setBotonClickable(true)
         } else {
-            setMensajeButton("Falta uno o mas campos por rellenar")
+            setBotonClickable(false)
         }
     }, [nombre, apellido, email, sexo, mensaje, terminos])
 
@@ -107,11 +120,40 @@ function Fomrulario() {
         function(){
             handleValidateAll();
         },
-        [handleValidateAll]
+        [handleValidateAll],
+
+        function(){
+            fetchPost(url)
+        }, [data]
     );
 
+    async function fetchPost(url) {
+        await fetch(url, {
+            method: "POST",
+            body: JSON.stringify(data), //Convierte JS en JSON
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+    }
+
     const handleSubmit = (e) => {
+        //Al enviar los datos del formulario este se tiene que vaciar
         e.preventDefault();
+        if (botonClickable) {
+            setMensajeButton("Formulario enviado")
+            data = {
+                nombre: nombre,
+                apellido: apellido,
+                email: email,
+                sexo: sexo,
+                mensaje: mensaje,
+                terminos: terminos
+            }
+            console.log(data)
+        } else {
+            setMensajeButton("Falta uno o mas campos por rellenar")
+        }
     }
 
     return (
@@ -150,7 +192,7 @@ function Fomrulario() {
                 <p className='Texto'>{mensajeTerminos}</p>
 
                 <br/>
-                <button type="submit" className='Boton'>Click to submit</button>
+                <button type="submit" className={`${botonClickable ? 'BotonClickable' : 'Boton'}`}>Click to submit</button>
                 <p className='Texto'>{mensajeButton}</p>
             </div>
         </form>

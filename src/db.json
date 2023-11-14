@@ -1,0 +1,12 @@
+{
+    "users": [
+      {
+        "nombre": "Nombre",
+        "apellido": "Apellido",
+        "email": "Email@gmail.com",
+        "sexo": "hombre",
+        "mensaje": "",
+        "terminos": false
+      }
+    ]
+  }
