@@ -1,5 +1,6 @@
 import './Formulario.css'
 import { useCallback, useEffect, useState } from "react"
+import React from 'react'
 
 function Fomrulario() {
 
@@ -22,14 +23,14 @@ function Fomrulario() {
 
     const url = "http://localhost:5000/users"
 
-    let data = {
+    const [data, setData] = useState({
         nombre: "",
         apellido: "",
         email: "",
         sexo: "",
         mensaje: "",
         terminos: false
-    }
+    })
 
     function handleValidateNombre(event) {
         let enteredNombre = event.target.value
@@ -91,9 +92,9 @@ function Fomrulario() {
     function handleValidateTerminos(event) {
         setTerminos(event.target.checked)
         if (terminos) {
-            setMensajeTerminos("")
-        } else {
             setMensajeTerminos("Se tienen que aceptar los terminos y condiciones")
+        } else {
+            setMensajeTerminos("")
         }
     }
 
@@ -185,7 +186,7 @@ function Fomrulario() {
                 <p className='Texto'>{mensajeMensaje}</p>
 
                 <input type="checkbox" onChange={handleValidateTerminos}/>
-                <laebl className='Texto'> Acepto los terminos y condiciones</laebl>
+                <label className='Texto'> Acepto los terminos y condiciones</label>
                 <p className='Texto'>{mensajeTerminos}</p>
 
                 <br/>
