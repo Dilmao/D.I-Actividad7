@@ -19,18 +19,8 @@ function Fomrulario() {
     const [mensajeTerminos, setMensajeTerminos] = useState("")
 
     const [botonClickable, setBotonClickable] = useState(false)
-    const [mensajeButton, setMensajeButton] = useState("")
 
     const url = "http://localhost:5000/users"
-
-    const [data, setData] = useState({
-        nombre: "",
-        apellido: "",
-        email: "",
-        sexo: "",
-        mensaje: "",
-        terminos: false
-    })
 
     function handleValidateNombre(event) {
         let enteredNombre = event.target.value
@@ -112,20 +102,13 @@ function Fomrulario() {
         } else {
             setBotonClickable(false)
         }
-    }, [nombre, apellido, email, sexo, mensaje, terminos])
+    }, [nombre, apellido, email, sexo, mensaje, terminos, botonClickable])
 
-    useEffect(
-        function(){
-            handleValidateAll();
-        },
-        [handleValidateAll],
+    useEffect(() => {
+        handleValidateAll();
+      }, [handleValidateAll]);
 
-        function(){
-            fetchPost(url)
-        }, [data]
-    );
-
-    async function fetchPost(url) {
+    async function fetchPost(url,data) {
         await fetch(url, {
             method: "POST",
             body: JSON.stringify(data), //Convierte JS en JSON
@@ -136,22 +119,18 @@ function Fomrulario() {
     }
 
     const handleSubmit = (e) => {
-        //Al enviar los datos del formulario este se tiene que vaciar
         e.preventDefault();
-        if (botonClickable) {
-            setMensajeButton("Formulario enviado")
-            data = {
-                nombre: nombre,
-                apellido: apellido,
-                email: email,
-                sexo: sexo,
-                mensaje: mensaje,
-                terminos: terminos
-            }
-            console.log(data)
-        } else {
-            setMensajeButton("Falta uno o mas campos por rellenar")
-        }
+        const data = {
+            nombre: nombre,
+            apellido: apellido,
+            email: email,
+            sexo: sexo,
+            mensaje: mensaje,
+            terminos: terminos
+        };
+        fetchPost(url, data).then(() => {
+            alert("Usuario guardado con exito");
+        })
     }
 
     return (
@@ -190,8 +169,7 @@ function Fomrulario() {
                 <p className='Texto'>{mensajeTerminos}</p>
 
                 <br/>
-                <button type="submit" className={`${botonClickable ? 'BotonClickable' : 'Boton'}`}>Click to submit</button>
-                <p className='Texto'>{mensajeButton}</p>
+                <button type="submit" disabled={!botonClickable} className={`${botonClickable ? 'BotonClickable' : 'Boton'}`}>Click to submit</button>
             </div>
         </form>
     )
